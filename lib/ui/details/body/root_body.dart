@@ -10,11 +10,11 @@ class RootBody extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
-          color: Colors.amber,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radiusValue),
-            topRight: Radius.circular(radiusValue),
-          ),
+          color: Colors.white,
+          // borderRadius: BorderRadius.only(
+          //   topLeft: Radius.circular(radiusValue),
+          //   topRight: Radius.circular(radiusValue),
+          // ),
         ),
         height: 200,
         child: const Center(child: Text("Body Widget!")),
