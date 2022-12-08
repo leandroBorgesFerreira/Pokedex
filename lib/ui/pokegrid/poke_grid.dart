@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'dart:convert';
+import 'package:pokedex/data/api.dart';
 import 'package:pokedex/model/pokemon_info.dart';
-import 'package:palette_generator/palette_generator.dart';
+import 'package:pokedex/ui/common/widget/ElementInfoText.dart';
+import 'package:pokedex/ui/details/details.dart';
+import 'package:pokedex/utils/color.dart';
 
-StatelessWidget pokemonTile(
-    Color? color, String name, String type, int imageIndex) {
+StatelessWidget pokemonTile(BuildContext context, Color color,
+    PokemonInfo pokemonInfo, int pokemonIndex) {
   const _nameFont =
       TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold);
 
@@ -14,19 +15,15 @@ StatelessWidget pokemonTile(
 
   var _nameWidget = Padding(
     padding: const EdgeInsets.symmetric(vertical: 5),
-    child: Text(name, style: _nameFont),
+    child: Hero(
+      tag: "heroPokeName$pokemonIndex",
+      child: Text(pokemonInfo.displayName(), style: _nameFont),
+    ),
   );
 
-  var _elementWidget = Row(children: [
-    Container(
-      child: Center(child: Text(type, style: _typeFont)),
-      decoration: const BoxDecoration(
-        color: Colors.white24,
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-    )
-  ]);
+  var _elementWidget = Row(
+    children: [ElementInfoText(text: pokemonInfo.type)],
+  );
 
   var _pokemonInfo = ListView(
     physics: const NeverScrollableScrollPhysics(),
@@ -44,9 +41,12 @@ StatelessWidget pokemonTile(
 
   var _pictureWidget = Container(
     padding: const EdgeInsets.only(left: 0, right: 8, top: 0, bottom: 4),
-    child: Image.network(
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$imageIndex.png",
-      width: 100,
+    child: Hero(
+      tag: "pokeImage$pokemonIndex",
+      child: Image.network(
+        getPokemonImageUrl(pokemonIndex),
+        width: 100,
+      ),
     ),
   );
 
@@ -55,14 +55,28 @@ StatelessWidget pokemonTile(
     alignment: AlignmentDirectional.bottomEnd,
   );
 
-  return Container(
-    clipBehavior: Clip.hardEdge,
-    padding: const EdgeInsets.only(left: 16, right: 0, top: 12, bottom: 0),
-    margin: const EdgeInsets.all(6),
-    decoration: BoxDecoration(
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PokemonDetails(
+                  pokemonInfo: pokemonInfo,
+                  color: color,
+                  pokemonIndex: pokemonIndex,
+                )),
+      );
+    },
+    child: Container(
+      clipBehavior: Clip.hardEdge,
+      padding: const EdgeInsets.only(left: 16, right: 0, top: 12, bottom: 0),
+      margin: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
         color: color,
-        borderRadius: const BorderRadius.all(Radius.circular(20))),
-    child: tileForeground,
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+      ),
+      child: tileForeground,
+    ),
   );
 }
 
@@ -105,16 +119,7 @@ class _PokemonGridState extends State<PokemonGrid> {
   }
 
   GridView _getPokeGrid() {
-    var _colors = {
-      Colors.teal[100],
-      Colors.teal[200],
-      Colors.teal[300],
-      Colors.teal[400],
-      Colors.teal[500],
-      Colors.teal[600],
-      Colors.teal[700],
-      Colors.teal[800],
-    };
+    var _colors = getAppColors();
 
     return GridView.builder(
       controller: _scrollController,
@@ -134,9 +139,9 @@ class _PokemonGridState extends State<PokemonGrid> {
         } else {
           var pokemon = _pokemonList[index];
           return pokemonTile(
-            _colors.elementAt(index % _colors.length),
-            pokemon.name,
-            pokemon.type,
+            context,
+            _colors.elementAt(index % _colors.length) ?? Colors.teal,
+            pokemon,
             index + 1,
           );
         }
@@ -157,16 +162,7 @@ class _PokemonGridState extends State<PokemonGrid> {
 
   fetchData() async {
     try {
-      final response = await get(
-        Uri.parse(
-          "https://pokeapi.co/api/v2/pokemon?limit=$_limit&offset=$_offset",
-        ),
-      );
-      Map responseList = json.decode(response.body);
-      List results = responseList["results"];
-      var pokemonList =
-          results.map((data) => PokemonInfo(data["name"] ?? "No name"));
-
+      var pokemonList = await getPokemonInfoList(_limit, _offset);
       _pokemonList.addAll(pokemonList);
       setState(() {
         _offset += _limit;
