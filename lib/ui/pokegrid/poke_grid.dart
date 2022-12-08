@@ -124,8 +124,8 @@ class _PokemonGridState extends State<PokemonGrid> {
     return GridView.builder(
       controller: _scrollController,
       itemCount: _pokemonList.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 300,
         childAspectRatio: 1.4,
       ),
       itemBuilder: (BuildContext context, int index) {
