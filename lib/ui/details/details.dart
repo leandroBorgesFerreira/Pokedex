@@ -39,19 +39,21 @@ PreferredSizeWidget appBar(BuildContext context, Color color) {
     actions: [
       IconButton(
         onPressed: () {},
-        icon:
-        const Icon(Icons.heart_broken_outlined, color: Colors.white),
+        icon: const Icon(Icons.heart_broken_outlined, color: Colors.white),
       ),
     ],
   );
 }
 
 Widget screenBody(PokemonInfo pokemonInfo, int pokemonIndex, Color color) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Header(pokemonInfo: pokemonInfo, index: pokemonIndex, color: color),
-      const RootBody(key: Key(""))
-    ],
+  return Container(
+    color: color,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Header(pokemonInfo: pokemonInfo, index: pokemonIndex, color: color),
+        const RootBody(key: Key(""))
+      ],
+    ),
   );
 }

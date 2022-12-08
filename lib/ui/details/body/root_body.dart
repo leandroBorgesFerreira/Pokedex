@@ -5,13 +5,20 @@ class RootBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.amber,
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+    const double radiusValue = 30;
+
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.amber,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(radiusValue),
+            topRight: Radius.circular(radiusValue),
+          ),
+        ),
+        height: 200,
+        child: const Center(child: Text("Body Widget!")),
       ),
-      height: 200,
-        child: const Center(child: Text("Body Widget!")) ,
     );
   }
 }
