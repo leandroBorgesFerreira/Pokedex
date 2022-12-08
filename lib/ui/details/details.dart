@@ -19,37 +19,31 @@ class PokemonDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pokedex',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.teal,
-      ),
+      theme: ThemeData(primarySwatch: Colors.teal),
       home: Scaffold(
         // extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: color,
-          elevation: 0,
-          leading: BackButton(
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.heart_broken_outlined, color: Colors.white),
-            ),
-          ],
-        ),
+        appBar: appBar(context, color),
         body: screenBody(pokemonInfo, pokemonIndex, color),
       ),
     );
   }
+}
+
+PreferredSizeWidget appBar(BuildContext context, Color color) {
+  return AppBar(
+    backgroundColor: color,
+    elevation: 0,
+    leading: BackButton(
+      onPressed: () => Navigator.of(context).pop(),
+    ),
+    actions: [
+      IconButton(
+        onPressed: () {},
+        icon:
+        const Icon(Icons.heart_broken_outlined, color: Colors.white),
+      ),
+    ],
+  );
 }
 
 Widget screenBody(PokemonInfo pokemonInfo, int pokemonIndex, Color color) {
