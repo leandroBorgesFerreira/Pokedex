@@ -47,12 +47,12 @@ PreferredSizeWidget appBar(BuildContext context, Color color) {
 
 Widget screenBody(PokemonInfo pokemonInfo, int pokemonIndex, Color color) {
   return Container(
-    color: color,
+    color: Colors.white,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Header(pokemonInfo: pokemonInfo, index: pokemonIndex, color: color),
-        const RootBody(key: Key(""))
+        RootBody(index: pokemonIndex),
       ],
     ),
   );
