@@ -7,6 +7,6 @@ class PokemonInfo {
   PokemonInfo(this.name, [this.type = "Unkown"]);
 
   String displayName() {
-    return capitalize(name);
+    return name.capitalize();
   }
 }

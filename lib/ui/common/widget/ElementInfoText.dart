@@ -20,6 +20,7 @@ class ElementInfoText extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 4),
     );
   }
 }

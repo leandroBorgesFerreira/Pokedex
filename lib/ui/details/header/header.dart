@@ -3,6 +3,8 @@ import 'package:pokedex/data/api.dart';
 import 'package:pokedex/model/pokemon_info.dart';
 import 'package:pokedex/ui/common/widget/ElementInfoText.dart';
 
+import '../../../model/pokemon_details.dart';
+
 class Header extends StatefulWidget {
   const Header({
     Key? key,
@@ -31,7 +33,7 @@ class _HeaderState extends State<Header> {
       padding: const EdgeInsets.only(left: 30),
       child: Column(children: [
         nameInfo(),
-        typeInfo(),
+        TypeInformation(pokemonIndex: widget.index),
       ]),
     );
   }
@@ -108,5 +110,45 @@ class _HeaderState extends State<Header> {
       ),
       pokemonNumber(),
     ]);
+  }
+}
+
+class TypeInformation extends StatefulWidget {
+  const TypeInformation({Key? key, required this.pokemonIndex})
+      : super(key: key);
+
+  final int pokemonIndex;
+
+  @override
+  State<TypeInformation> createState() => _TypeInformationState();
+}
+
+class _TypeInformationState extends State<TypeInformation> {
+  late Future<PokemonDetails> futurePokemonDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<PokemonDetails>(
+      future: futurePokemonDetails,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          var pokemonDetails = snapshot.data;
+
+          var elementList = pokemonDetails!.typeSlotList
+              .map((typeSlot) => ElementInfoText(text: typeSlot.type.name));
+          return Row(children: elementList.toList());
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    futurePokemonDetails = getPokemonDetails(widget.pokemonIndex);
   }
 }

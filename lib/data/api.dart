@@ -1,16 +1,31 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:pokedex/model/pokemon_details.dart';
 import 'package:pokedex/model/pokemon_info.dart';
+
+const baseUrl = "https://pokeapi.co/api/v2";
+
+Future<PokemonDetails> getPokemonDetails(int pokemonIndex) async {
+  final response = await get(
+    Uri.parse(
+      "$baseUrl/pokemon/$pokemonIndex",
+    ),
+  );
+
+  Map<String, dynamic> responseMap = json.decode(response.body);
+
+  return PokemonDetails.fromJson(responseMap);
+}
 
 Future<List<PokemonInfo>> getPokemonInfoList(int limit, int offset) async {
   final response = await get(
     Uri.parse(
-      "https://pokeapi.co/api/v2/pokemon?limit=$limit&offset=$offset",
+      "$baseUrl/pokemon?limit=$limit&offset=$offset",
     ),
   );
-  Map responseList = json.decode(response.body);
-  List results = responseList["results"];
+  Map responseMap = json.decode(response.body);
+  List results = responseMap["results"];
   return results.map((data) => PokemonInfo(data["name"] ?? "No name")).toList();
 }
 
