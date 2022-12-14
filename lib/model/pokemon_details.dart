@@ -17,13 +17,11 @@ class PokemonDetails {
   );
 
   factory PokemonDetails.fromJson(Map<String, dynamic> json) {
-    var abilitiesList = (json["abilities"] as List<dynamic>).map((abilitySlot) =>
-      AbilitySlot.fromJson(abilitySlot)
-    );
+    var abilitiesList = (json["abilities"] as List<dynamic>)
+        .map((abilitySlot) => AbilitySlot.fromJson(abilitySlot));
 
-    var typesList = (json["types"] as List<dynamic>).map((typeSlot) =>
-        TypeSlot.fromJson(typeSlot)
-    );
+    var typesList = (json["types"] as List<dynamic>)
+        .map((typeSlot) => TypeSlot.fromJson(typeSlot));
 
     return PokemonDetails(
       json["name"],
@@ -32,5 +30,11 @@ class PokemonDetails {
       typesList.toList(),
       abilitiesList.toList(),
     );
+  }
+
+  String displayAbilities() {
+    return abilitySlotList
+        .map((abilitySlot) => abilitySlot.ability.name)
+        .join(", ");
   }
 }
