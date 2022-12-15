@@ -1,4 +1,5 @@
 import 'package:pokedex/model/ability.dart';
+import 'package:pokedex/model/stats.dart';
 import 'package:pokedex/model/type.dart';
 
 class PokemonDetails {
@@ -7,6 +8,7 @@ class PokemonDetails {
   final int weight;
   final List<TypeSlot> typeSlotList;
   final List<AbilitySlot> abilitySlotList;
+  final List<BaseStats> baseStats;
 
   PokemonDetails(
     this.name,
@@ -14,6 +16,7 @@ class PokemonDetails {
     this.weight,
     this.typeSlotList,
     this.abilitySlotList,
+    this.baseStats,
   );
 
   factory PokemonDetails.fromJson(Map<String, dynamic> json) {
@@ -23,12 +26,16 @@ class PokemonDetails {
     var typesList = (json["types"] as List<dynamic>)
         .map((typeSlot) => TypeSlot.fromJson(typeSlot));
 
+    var baseStatsList = (json["stats"] as List<dynamic>)
+        .map((typeSlot) => BaseStats.fromJson(typeSlot));
+
     return PokemonDetails(
       json["name"],
       json["height"],
       json["weight"],
       typesList.toList(),
       abilitiesList.toList(),
+      baseStatsList.toList(),
     );
   }
 

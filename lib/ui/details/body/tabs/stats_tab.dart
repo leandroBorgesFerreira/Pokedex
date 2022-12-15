@@ -23,7 +23,7 @@ class _StatusTabState extends State<StatusTab> {
         children: const [
           Padding(
               padding: EdgeInsets.only(right: 10),
-              child: InfoIndexList(indexList: ["Height", "Weight", "Abilities"])
+              child: InfoIndexList(indexList: ["HP", "Attack", "Defence"])
           ),
         ],
       ),
